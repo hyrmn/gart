@@ -9,20 +9,15 @@ using SixLabors.ImageSharp.Processing;
 
 namespace gart.Algorithms;
 
-public class SimpleBoxes : IAlgorithm, IGenerateWithoutSource
+public class OverlappingDecahedrons : IAlgorithm, IGenerateWithoutSource
 {
-    public string Name => "Simple Boxes";
-    public string Description => "Generate randomly colored 20px by 20px boxes. Saves as a PNG file";
+    public string Name => "Overlapping Decahedrons";
+    public string Description => "This builds on Simple Boxes and gives us semi-transparent decahedron shapes over the full image. Saves as a PNG file";
 
     public void Generate(Dimensions dim, Destination destination)
     {
-        const int boxSize = 40;
-
         var rand = new Random();
-
-        var rows = dim.Height / boxSize;
-        var cols = dim.Width / boxSize;
-        var halfSize = boxSize / 2;
+        const int boxSize = 20;
 
         using var image = new Image<Rgba32>(dim.Width, dim.Height);
 
@@ -30,18 +25,19 @@ public class SimpleBoxes : IAlgorithm, IGenerateWithoutSource
         {
             ic.Fill(Color.White);
 
-            var rotation = GeometryUtilities.DegreeToRadian(45);
+            var rows = dim.Height / boxSize;
+            var cols = dim.Width / boxSize;
 
-            for (var row = 1; row < rows; row++)
+            for (var row = 0; row < rows; row++)
             {
-                for (var col = 1; col < cols; col++)
+                for (var col = 0; col < cols; col++)
                 {
                     var r = (byte)rand.Next(0, 255);
                     var g = (byte)rand.Next(0, 255);
                     var b = (byte)rand.Next(0, 255);
-                    var squareColor = new Color(new Rgba32(r, g, b, 255));
+                    var squareColor = new Color(new Rgba32(r, g, b, 100));
 
-                    var polygon = new RegularPolygon(boxSize * col, boxSize * row, 4, halfSize, rotation);
+                    var polygon = new RegularPolygon(40 * col, 40 * row, 10, 30);
                     ic.Fill(squareColor, polygon);
                 }
             }

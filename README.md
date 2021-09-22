@@ -8,7 +8,7 @@ I am building out a few generative art algorithms for fun and, since I promised 
 
 The UI is built with 💖 using [Terminal.Gui](https://github.com/migueldeicaza/gui.cs). 
 
-The only reason I'm even creating generative art is because of the amazing work that [James South](https://twitter.com/James_M_South) and [Six Labors](https://sixlabors.com/) have done to make working with graphics in .NET easy and painless.
+The only reason I'm even creating generative art is because of the amazing work that [James South](https://twitter.com/James_M_South) has done at [Six Labors](https://sixlabors.com/) to make working with graphics in .NET easy and painless.
 
 ![Early screenshot of the UI](betascreenshot.jpg)
 

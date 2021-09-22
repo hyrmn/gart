@@ -1,3 +1,3 @@
 ﻿namespace gart;
 
-public record Source(FileInfo[] sources);
+public record Source(FileInfo[] Files);

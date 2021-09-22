@@ -2,5 +2,7 @@
 
 public interface IGenerateWithSource
 {
-    void Generate(string[] sourceFiles, int width, int height, string destinationFile);
+    bool AllowMultipleFiles { get; }
+
+    void Generate(Source source, Dimensions destinationDimensions, Destination destination);
 }

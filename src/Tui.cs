@@ -1,7 +1,5 @@
 ﻿using gart.Algorithms;
 
-using NStack;
-
 using System.ComponentModel;
 
 using Terminal.Gui;
@@ -10,10 +8,10 @@ namespace gart;
 
 public class Tui
 {
+    private static readonly IAlgorithm[] algorithms = new IAlgorithm[] { new SimpleBoxes(), new OverlappingDecahedrons(), new PixelSort() };
+
     public void Start()
     {
-        var algorithms = new IAlgorithm[] { new SimpleBoxes(), new OverlappingDecahedrons() };
-
         Application.Init();
 
         var top = Application.Top;
@@ -208,7 +206,7 @@ public class Tui
             CanFocus = false,
         };
 
-        algoDetails.Text = algorithms[algoListView.SelectedItem].Description;
+        algoDetails.Text = selectedAlgorithm().Description;
         algoDetails.WordWrap = true;
 
         algoDetailsFrame.Add(algoDetails);
@@ -225,11 +223,17 @@ public class Tui
 
         Application.Run();
 
+        IAlgorithm selectedAlgorithm() => algorithms[algoListView.SelectedItem];
+
         void ChooseInputFiles()
         {
+            if (selectedAlgorithm() is not IGenerateWithSource) return;
+
+            bool allowsMultiple = ((IGenerateWithSource)selectedAlgorithm()).AllowMultipleFiles;
+
             var dialog = new OpenDialog("Choose input files", "Choose input file(s) for your generator", allowedTypes: new List<string> { ".jpg" })
             {
-                AllowsMultipleSelection = true,
+                AllowsMultipleSelection = allowsMultiple,
                 DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             };
 
@@ -272,15 +276,13 @@ public class Tui
 
         void GenerateArt()
         {
-            var selectedAlgo = algorithms[algoListView.SelectedItem];
-
             if (outputWidth.Text.IsEmpty || outputHeight.Text.IsEmpty || outputFile.Text.IsEmpty)
             {
                 MessageBox.ErrorQuery("Cannot generate", "You must specify a heigh, width and output file", "Close");
                 return;
             }
 
-            if (selectedAlgo is IGenerateWithSource && inputFiles.Text.IsEmpty)
+            if (selectedAlgorithm() is IGenerateWithSource && inputFiles.Text.IsEmpty)
             {
                 MessageBox.ErrorQuery("Cannot generate", "This generator requires at least one input file", "Close");
                 return;
@@ -294,24 +296,46 @@ public class Tui
             var outputSize = new Dimensions(width, height);
             var destination = new Destination(new FileInfo(outputFile.Text.ToString()));
 
-            var worker = new BackgroundWorker();
+            var worker = new BackgroundWorker() { WorkerSupportsCancellation = true };
             worker.DoWork += (s, e) =>
             {
 
-                if (selectedAlgo is IGenerateWithoutSource target)
+                if (selectedAlgorithm() is IGenerateWithoutSource target)
                 {
                     target.Generate(outputSize, destination);
                 }
                 else
                 {
-                    var sourceFiles = new List<FileInfo>();
+                    var sourceFile = new FileInfo(inputFiles.Text.ToString());
+                    if(!sourceFile.Exists)
+                    {
+                        MessageBox.ErrorQuery("Cannot generate", $"Source {sourceFile.FullName} does not exist", "Close");
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    var sourceFiles = new FileInfo[]
+                    {
+                        sourceFile
+                    };
+
+                    var source = new Source(sourceFiles);
+
+                    ((IGenerateWithSource)selectedAlgorithm()).Generate(source, outputSize, destination);
                 }
 
             };
 
             worker.RunWorkerCompleted += (s, e) =>
             {
-                statusMessage.Title = $"Last run saved to {destination.File.FullName}";
+                if (e.Cancelled)
+                {
+                    statusMessage.Title = $"Last run failed";
+                }
+                else
+                {
+                    statusMessage.Title = $"Last run saved to {destination.File.FullName}";
+                }
                 statusBar.SetNeedsDisplay();
             };
 
@@ -327,7 +351,7 @@ public class Tui
         void updateInputFileControls()
         {
             const string emptyMessage = "<not required for this generator>";
-            if (algorithms[algoListView.SelectedItem] is IGenerateWithoutSource)
+            if (selectedAlgorithm() is IGenerateWithoutSource)
             {
                 inputFiles.Enabled = false;
                 if (inputFiles.Text.IsEmpty)

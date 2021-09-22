@@ -8,7 +8,7 @@ I am building out a few generative art algorithms for fun and, since I promised 
 
 The UI is built with 💖 using [Terminal.Gui](https://github.com/migueldeicaza/gui.cs). 
 
-The only reason I'm even creating generative art is because of the amazing work that [James South](https://twitter.com/James_M_South) has done at [Six Labors](https://sixlabors.com/) to make working with graphics in .NET easy and painless.
+The only reason I'm even creating generative art is because of the amazing work that [James South](https://twitter.com/James_M_South), of [Six Labors](https://sixlabors.com/) fame, has done to make working with graphics in .NET easy and painless.
 
 ![Early screenshot of the UI](betascreenshot.jpg)
 
@@ -36,3 +36,9 @@ It's a bit early for contributions for others. But, I would highly encourage you
 
 - [Simple Colored Boxes](https://hyr.mn/lets-make-art-pt1)
 - more to come
+
+## Why's it called `gart`?
+
+Programs need names. Since it's a .NET generative art maker, I was leaning towards `nart` (.net art, not art? you decide what the `n` stands for). But, [@DawnAlison](https://github.com/DawnAlison/) suggested `gart` was a much better alternative. So long answer... because my wife picked the name.
+
+I think the real take-away is that you should not hire me to do branding or UI/UX work.

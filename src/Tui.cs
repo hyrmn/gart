@@ -248,7 +248,7 @@ public class Tui
 
         void ChooseOutputFile()
         {
-            var dialog = new FileDialog("Save art as...", "Ok", "File", "Choose where to save your generated art", allowedTypes: new List<string> { ".jpg" })
+            var dialog = new FileDialog("Save art as...", "Ok", "File", "Choose where to save your generated art", allowedTypes: [".png"])
             {
                 DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
             };

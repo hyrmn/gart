@@ -17,16 +17,20 @@ public class PixelSort : IAlgorithm, IGenerateWithSource
 
         using var destImg = new Image<Rgb24>(srcWidth, srcHeight);
 
-        for (var row = 0; row < srcHeight; row++)
+        srcImg.ProcessPixelRows(pixelAccessor =>
         {
-            var pixels = srcImg.GetPixelRowSpan(row).ToArray();
-            var orderedPixels = pixels.OrderBy(p => p.R + p.G + p.B).ToArray();
-
-            for (var col = 0; col < orderedPixels.Length; col++)
+            for (int row = 0; row < pixelAccessor.Height; row++)
             {
-                destImg[col, row] = orderedPixels[col];
+                var srcRow = pixelAccessor.GetRowSpan(row).ToArray();
+                var orderedPixels = srcRow.OrderBy(p => p.R + p.G + p.B).ToArray();
+
+                for (var col = 0; col < orderedPixels.Length; col++)
+                {
+                    destImg[col, row] = orderedPixels[col];
+                }
             }
-        }
+        });
+
         using var outputStream = destination.File.OpenWrite();
         destImg.SaveAsPng(outputStream);
     }

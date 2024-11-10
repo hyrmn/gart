@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta11" />
-    <PackageReference Include="Terminal.Gui" Version="1.2.1" />
+    <PackageReference Include="Terminal.Gui" Version="1.17.1" />
   </ItemGroup>
 
 </Project>

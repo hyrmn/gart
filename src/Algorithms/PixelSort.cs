@@ -12,8 +12,8 @@ public class PixelSort : IAlgorithm, IGenerateWithSource
     public void Generate(Source source, Dimensions destinationDimensions, Destination destination)
     {
         using var srcImg = Image.Load<Rgb24>(source.Files.First().FullName);
-        var srcWidth = srcImg.Size().Width;
-        var srcHeight = srcImg.Size().Height;
+        var srcWidth = srcImg.Size.Width;
+        var srcHeight = srcImg.Size.Height;
 
         using var destImg = new Image<Rgb24>(srcWidth, srcHeight);
 

@@ -9,7 +9,7 @@ public class PixelSort : IAlgorithm, IGenerateWithSource
     public string Description => "Goes line-by-line-through an image and sorts the pixels in each line by the sum of their RGB value. Destination size is ignored; the output will be the same size as the input.";
     public bool AllowMultipleFiles => false;
 
-    public void Generate(Source source, Dimensions destinationDimensions, Destination destination)
+    public void Generate(Source source, Dimensions dim, Destination destination)
     {
         using var srcImg = Image.Load<Rgb24>(source.Files.First().FullName);
         var srcWidth = srcImg.Size.Width;

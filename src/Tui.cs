@@ -8,7 +8,7 @@ namespace gart;
 
 public class Tui
 {
-    private static readonly IAlgorithm[] algorithms = new IAlgorithm[] { new SimpleBoxes(), new OverlappingDecahedrons(), new PixelSort() };
+    private static readonly IAlgorithm[] algorithms = new IAlgorithm[] { new SimpleBoxes(), new PixelSort(), new OverlappingDecahedrons(), new RandomGranite() };
 
     public void Start()
     {

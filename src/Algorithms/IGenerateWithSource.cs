@@ -4,5 +4,5 @@ public interface IGenerateWithSource
 {
     bool AllowMultipleFiles { get; }
 
-    void Generate(Source source, Dimensions destinationDimensions, Destination destination);
+    void Generate(Source source, Dimensions dim, Destination destination);
 }
